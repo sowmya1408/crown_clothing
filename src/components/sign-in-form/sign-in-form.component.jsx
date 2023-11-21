@@ -6,6 +6,7 @@ import {
 } from "../../utils/firebase/firebase.utils";
 import FormInput from "../form-input/form-input.component.component";
 import Button from "../button/button.component";
+//import { UserContext } from "../../contexts/user.context";
 import "./sign-in-form.styles.scss";
 const defaultSignInValues = {
   email: "",
@@ -13,14 +14,13 @@ const defaultSignInValues = {
 };
 const SignInForm = () => {
   const [signInFormFields, setSignInFormFields] = useState(defaultSignInValues);
-
+  //const { setCurrentUser } = useContext(UserContext);
   const resetFormFields = () => {
     setSignInFormFields(defaultSignInValues);
   };
   const signInWithGoogle = async () => {
     try {
-      const { user } = await signInWithGooglePopup();
-      await createUserDocumentFrmAuth(user);
+      await signInWithGooglePopup();
     } catch (error) {
       console.log("error with google pop up", error);
       alert("Google Sign-In Popup has been closed");
@@ -41,12 +41,10 @@ const SignInForm = () => {
   const handleEmailAndPasswordSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await signInAuthUserWithEmailAndPassword(
+      const { user } = await signInAuthUserWithEmailAndPassword(
         email,
         password
       );
-
-      console.log(response);
       resetFormFields();
     } catch (error) {
       switch (error.code) {
@@ -75,7 +73,6 @@ const SignInForm = () => {
     }, []); */
   //}
   const { email, password } = signInFormFields;
-  console.log(signInFormFields);
   return (
     <div className="sign-in-container">
       <h2>Already have an account</h2>
